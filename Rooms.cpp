@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstring>
 #include <map>
+#include <vector>
 
 /*Functionality:
   Entering message/constructor.
@@ -17,13 +18,13 @@ Rooms::Rooms(char description[]) { //description of room set on constructor
   cout << "Room Constructor" << endl;
 }
 
-void Rooms::setExits(char direction[], Rooms* neighbor) {
+void Rooms::setExit(char direction[], Rooms* neighbor) {
   exits.insert({direction, neighbor});
 }
 
-Rooms* Rooms::getExit(char direction[]) {
+char* Rooms::getExit(char direction[]) {
   char* temp = direction;
-  return exits[temp]; //return the Room associated with this direction 
+  return exits[temp]->getDescription(); //return the Room associated with this direction 
 }
 
 void Rooms::printRoomExits() { //Telling the player where exits are and what items are in the room
@@ -40,19 +41,36 @@ char* Rooms::getDescription() {
   return toReturn;
 }
 
-void Rooms::setItem(char newItem[]) {
+void Rooms::setItem(char newItem[]) { //set an item to the room (this would create a new item)
   Items* item = new Items;
   strcpy(item->description, newItem);
+  items.push_back(item); //add it to the room's item vector
 }
 
-void Rooms::getItems() {
-  
+Items* Rooms::getItem(char description[]) { //return an item based on the name?
+  for (it = items.begin(); it != items.end(); it++) {
+    if (strcmp(description, this->description) == 0) {
+      return *it; //return the item it is pointing to.
+    }
+  }
+  return NULL; //return null if no items of that name are found
 }
 
-void Rooms::removeItem(char item[]) {
+void Rooms::removeItem(char description[]) {
   //Loop through room items
+  for(it = items.begin(); it != items.end(); it++) {
+     if (strcmp(description, this->description) == 0) {
+      delete *it; //delete the item the iterator is pointing to
+      items.erase(it); //erase it from the vector
+    }
+  }
 }
 
-void Rooms::printRoomItems() {
-
+void Rooms::printRoomItems() { //Prints out all items in a room
+  vector<Items*>::iterator it;
+  //Loop through the vector of items
+  for (it = items.begin(); it != items.end(); it++) {
+    char* output = (*it)->getDescription();
+    cout << output << " " << endl;
+  }
 }
