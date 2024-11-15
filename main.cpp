@@ -2,9 +2,13 @@
 #include <cstring>
 #include <vector>
 #include "Rooms.h"
-#include "commands.h"
+#include "Command.h"
+#include "Parser.h"
 
 int main() {
+  char testChar[20] = "Test Char";
+  bool gameEnd = false;
+  
   vector<Rooms*> rooms;
   char roomName[20];
   char itemName[20]; //separate arrays for rooms and items for clarity
@@ -24,8 +28,15 @@ int main() {
   strcpy(exitDir, "NORTH"); 
   testRoom->setExit(exitDir, testRoom2);
 
-  
-  
   cout << "debug" << endl; //to set a breakpoint to
+
+  Parser newParser;
+
+  newParser.getCommand();
+  
+  while (!gameEnd) {
+    //commands* newCommand = Parser->getCommand();
+    //gameEnd = processCommand(newCommand);
+  }
   return 0;
 }
