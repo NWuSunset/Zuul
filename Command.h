@@ -1,3 +1,6 @@
+#ifndef COMMAND_H
+#define COMMAND_H
+
 #include <cstring>
 #include <vector>
 
@@ -20,3 +23,5 @@ private:
   char commandWord[20];
   char secondWord[20];
 };
+
+#endif
