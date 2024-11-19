@@ -8,7 +8,7 @@ Parser::Parser() {
 
 Command* Parser::getCommand() { 
   cin.getline(input, 40);
-
+    
   int split = 0;
   //Split at a space to get the first and second words
   while (!isspace(input[split])) { //incriment until we hit a space
@@ -24,11 +24,15 @@ Command* Parser::getCommand() {
 	secondWord[i] = input[i];
       }
       //secondWord[strlen(input)] = '\0';
-      
-      if (newCommand->isCommand(firstWord)) {
-	return new Command(firstWord, secondWord);
-      } else {
 
+      //Check if the firstCommand is valid, and has a second valid command
+      if (newCommand->isCommand(firstWord)) { //if the first word is valid
+	if (newCommand->isCommand(secondWord)) { //if the second word is valid
+	  return new Command(firstWord, secondWord); //Return a two part command 
+	} else {
+	  return new Command(firstWord, NULL); //If no second Word
+	} 
+      } else {
+	return new Command(NULL, secondWord); //Command is invalid
       }
   }
-
