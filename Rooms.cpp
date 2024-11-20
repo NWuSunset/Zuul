@@ -18,6 +18,10 @@ Rooms::Rooms(char description[]) { //description of room set on constructor
   cout << "Room Constructor" << endl;
 }
 
+Rooms::Rooms() {
+  //Empty constructor
+}
+
 void Rooms::setExit(char direction[], Rooms* neighbor) {
   exits.insert({direction, neighbor});
 }
@@ -72,5 +76,13 @@ void Rooms::printRoomItems() { //Prints out all items in a room
   for (it = items.begin(); it != items.end(); it++) {
     char* output = (*it)->getDescription();
     cout << output << " " << endl;
+  }
+}
+
+void Rooms::toggleLock() {
+  if (!locked) {
+    locked = true;
+  } else {
+    locked = false;
   }
 }
