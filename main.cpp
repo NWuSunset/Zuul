@@ -7,6 +7,13 @@
 
 void createRooms(vector<Rooms*> &, Rooms* &currentRoom);
 bool executeCommand(Command* command);
+void printHelp();
+bool goRoom(Command* command);
+bool quit(Command* command);
+void printInventory();
+bool getItem(Command* command);
+void dropItem(Command* command);
+void listRooms();
 
 int main() {
   Parser* parser = new Parser; //Parser
@@ -25,6 +32,7 @@ int main() {
   //Print the game intro screen
 
 
+  //Go to Chem room to get student store key. Go to student store to get snack pass. Go to engineering lab to get lockpick. Unlock secret rooms and have snack pass to win.
   //Play the game
   while (!gameEnd) { //keep playing until the game ends
     cout << "S+EHROWEHRO" << endl;
@@ -35,12 +43,65 @@ int main() {
 }
 
 bool executeCommand(Command* command) {
-  bool quit = false;
+  bool wantToQuit = false;
+  char commandWord[20];
+  if (command->isUnknown()) {
+    cout << "Unknown command.." << endl;
+  }
 
-
-  return quit;
+  strcpy(commandWord, command->getCommandWord()); 
+  
+  if (strcmp(commandWord, "help") == 0) { //if the command is help
+    //Print help.
+    printHelp();
+  } else if (strcmp(commandWord, "go") == 0) {
+    wantToQuit = goRoom(command);
+  } else if (strcmp(commandWord, "quit") == 0) {
+    wantToQuit = quit(command);
+  } else if (strcmp(commandWord, "inventory") == 0) {
+    printInventory();
+  } else if (strcmp(commandWord, "get") == 0) {
+    wantToQuit = getItem(command);
+  } else if (strcmp(commandWord, "drop") == 0) {
+    dropItem(command);
+  } else if (strcmp(commandWord, "listrooms") == 0) {
+    listRooms();
+  }
+  return wantToQuit;
 }
 
+void printHelp() {
+
+}
+
+bool goRoom(Command* command) {
+
+}
+
+bool quit(Command* command) {
+
+}
+
+void printInventory() {
+
+}
+
+bool getItem(Command* command) {
+  
+}
+
+void dropItem(Command* command) {
+  
+}
+
+void listRooms() {
+  char roomList[17][40] = { "Outside", "Theater", "Student Store", "Bathroom one", "Lab", "Office", "Computer Lab", "Physics room",
+			"Chemistry room", "Biology room", "Language room", "Cafeteria", "Secret Room (I wonder what's in there)",
+			"Math room", "Bathroom two", "English Room", "Engineering lab" };
+    for (int i = 0; i < 18; i++) {
+      cout << roomList[i];
+    }
+}
 
 
 void createRooms(vector<Rooms*> &rooms, Rooms* &currentRoom) {

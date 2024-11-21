@@ -8,7 +8,26 @@ Parser::Parser() {
 
 Command* Parser::getCommand() { 
   cin.getline(input, 40);
-    
+
+  char* token = strtok(input, " ");
+  if (token != NULL) { //If the first word exists
+    strcpy(firstWord, token); //then copy it into the first word cstring
+    cout << token << endl;
+  } else {
+    firstWord[0] = '\0'; //Set firstWord null  if token is null
+  }
+  //move onto the next token. Null indicates using the same pointer to the input
+  token = strtok(NULL, " ");
+  if (token != NULL) { //Now check the second word
+    strcpy(secondWord, token);
+      cout << token << endl;
+  } else {
+    secondWord[0] = '\0'; //basically set it to NULL
+  }
+
+  
+  
+  /*
   int split = 0;
   //Split at a space to get the first and second words
   while (!isspace(input[split])) { //incriment until we hit a space
@@ -24,15 +43,13 @@ Command* Parser::getCommand() {
 	secondWord[i] = input[i];
       }
       //secondWord[strlen(input)] = '\0';
+      */
 
+  
       //Check if the firstCommand is valid, and has a second valid command
-      if (newCommand->isCommand(firstWord)) { //if the first word is valid
-	if (newCommand->isCommand(secondWord)) { //if the second word is valid
-	  return new Command(firstWord, secondWord); //Return a two part command 
-	} else {
-	  return new Command(firstWord, NULL); //If no second Word
-	} 
+      if (newCommand->isCommand(firstWord)) { //if the first word is valid 
+	return new Command(firstWord, secondWord);
       } else {
-	return new Command(NULL, secondWord); //Command is invalid
+	return new Command(NULL, secondWord); //Command is invalid (null command)
       }
   }
