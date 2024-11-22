@@ -19,7 +19,7 @@ public:
 
   //Methods
   void setExit(char direction[], Rooms* neighbor);
-  char* getExit(char direction[]);
+  Rooms* getExit(char direction[]);
   void printRoomExits();
   char* getDescription();
   void setItem(char newItem[]);

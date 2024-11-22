@@ -26,9 +26,11 @@ void Rooms::setExit(char direction[], Rooms* neighbor) {
   exits.insert({direction, neighbor});
 }
 
-char* Rooms::getExit(char direction[]) {
+Rooms* Rooms::getExit(char direction[]) {
   char* temp = direction;
-  return exits[temp]->getDescription(); //return the Room associated with this direction 
+  return exits[temp];  //return the Room associated with this direction
+
+  //!! check if it returns null when no direction exits for it
 }
 
 void Rooms::printRoomExits() { //Telling the player where exits are and what items are in the room
@@ -57,7 +59,7 @@ Items* Rooms::getItem(char description[]) { //return an item based on the name?
       return *it; //return the item it is pointing to.
     }
   }
-  return NULL; //return null if no items of that name are found
+  return nullptr; //return null if no items of that name are found
 }
 
 void Rooms::removeItem(char description[]) {

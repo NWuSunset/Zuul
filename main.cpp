@@ -6,14 +6,15 @@
 #include "Parser.h"
 
 void createRooms(vector<Rooms*> &, Rooms* &currentRoom);
-bool executeCommand(Command* command);
-void printHelp();
-bool goRoom(Command* command);
+bool executeCommand(Command* command, vector<Items*> &inventory, Rooms* &currentRoom, Parser* parser);
+void printHelp(Parser* parser);
+bool goRoom(Command* command, Rooms* &currentRoom);
 bool quit(Command* command);
-void printInventory();
-bool getItem(Command* command);
-void dropItem(Command* command);
+void printInventory(vector<Items*> &inventory);
+bool getItem(Command* command, vector<Items*> &inventory, Rooms* &currentRoom);
+bool dropItem(Command* command, vector<Items*> &inventory, Rooms* &currentRoom);
 void listRooms();
+bool hasItem(char item[]);
 
 int main() {
   Parser* parser = new Parser; //Parser
@@ -37,12 +38,12 @@ int main() {
   while (!gameEnd) { //keep playing until the game ends
     cout << "S+EHROWEHRO" << endl;
     Command* command = parser->getCommand();
-    gameEnd = executeCommand(command); //wait for the quit command basically
+    gameEnd = executeCommand(command, inventory, currentRoom, parser); //wait for the quit command basically
   }
   return 0;
 }
 
-bool executeCommand(Command* command) {
+bool executeCommand(Command* command, vector<Items*> &inventory, Rooms* &currentRoom, Parser* parser) {
   bool wantToQuit = false;
   char commandWord[20];
   if (command->isUnknown()) {
@@ -51,56 +52,163 @@ bool executeCommand(Command* command) {
 
   strcpy(commandWord, command->getCommandWord()); 
   
-  if (strcmp(commandWord, "help") == 0) { //if the command is help
+  if (strcasecmp(commandWord, "help") == 0) { //if the command is help
     //Print help.
-    printHelp();
-  } else if (strcmp(commandWord, "go") == 0) {
-    wantToQuit = goRoom(command);
-  } else if (strcmp(commandWord, "quit") == 0) {
+    printHelp(parser);
+  } else if (strcasecmp(commandWord, "go") == 0) {
+    wantToQuit = goRoom(command, currentRoom);
+  } else if (strcasecmp(commandWord, "quit") == 0) {
     wantToQuit = quit(command);
-  } else if (strcmp(commandWord, "inventory") == 0) {
-    printInventory();
-  } else if (strcmp(commandWord, "get") == 0) {
-    wantToQuit = getItem(command);
-  } else if (strcmp(commandWord, "drop") == 0) {
-    dropItem(command);
-  } else if (strcmp(commandWord, "listrooms") == 0) {
+  } else if (strcasecmp(commandWord, "inventory") == 0) {
+    printInventory(inventory);
+  } else if (strcasecmp(commandWord, "get") == 0) {
+    wantToQuit = getItem(command, inventory, currentRoom);
+  } else if (strcasecmp(commandWord, "drop") == 0) {
+    dropItem(command, inventory, currentRoom);
+  } else if (strcasecmp(commandWord, "listrooms") == 0) {
     listRooms();
   }
   return wantToQuit;
 }
 
-void printHelp() {
+bool goRoom(Command* command, Rooms* &currentRoom) {
+  char direction[20];
+  if (!command->hasSecondWord()) {
+    cout << "Go where?" << endl;
+    return false;
+  }
 
+  strcpy(direction, command->getSecondWord());
+
+  Rooms* nextRoom = currentRoom->getExit(direction);
+
+  if (nextRoom == nullptr) { //check if this will actually ever be null in the rooms.cpp
+    cout << "There is no exit that way" << endl;
+  } else if () { //impliment locked method. And checking which room it is to give individual hints
+    //Student store need it's key. secret room needs lock pick. //Snacks need snack pass.
+  } else {
+    currentRoom = nextRoom; //go to the next room.
+    cout << currentRoom->getDescription();
+  }
+return false;
 }
 
-bool goRoom(Command* command) {
 
+bool getItem(Command* command, vector<Items*> &inventory, Rooms* &currentRoom) {
+  char item[20];
+
+  if (!command->hasSecondWord()) {
+    cout << "Get what?" << endl;
+    return false;
+  }
+
+  strcpy(item, command->getSecondWord());
+
+  //get the item.
+  Items* newItem = currentRoom->getItem(item);
+
+  if (newItem == nullptr) {
+    cout << "That item isn't here" << endl;
+  } else if (strcasecmp(item, "Snacks") == 0 ) {
+    //needs snack pass
+  } else {
+
+    //Put in inventory
+    inventory.push_back(newItem);
+    currentRoom->removeItem(item);
+    cout << "Picked up: " << item << endl;
+
+    //check if the item was for progression (give hints to the player)
+    if (strcasecmp(item, "Student Store key") == 0 ) {
+
+    } else if (strcasecmp(item, "Snack Pass") == 0 ) {
+
+    } else if (strcasecmp(item, "Lock Pick") == 0 ) {
+
+    } else if (strcasecmp(item, "Snacks") == 0 ) {
+      cout << "You go some good snacks! You WIN!" << endl;
+      return true; //will end the game
+    }
+  }
+  return false;
 }
 
-bool quit(Command* command) {
+bool dropItem(Command* command, vector<Items*> &inventory, Rooms* &currentRoom) {
+  char item[20];
+  bool inInv = false;
+  int itemIndex = NULL;
 
+  if (!command->hasSecondWord()) {
+    cout << "Drop what?" << endl;
+    return false;
+  }
+
+  strcpy(item, command->getSecondWord()); //create a cstring of the item
+
+  //loop through the inventory and drop the respective item.
+  for (vector<Items*>::iterator it = inventory.begin(); it != inventory.end(); ) {
+    if (strcasecmp((*it)->getDescription(), item) == 0) {
+      itemIndex = it - inventory.begin();
+      inInv = true;
+      break;
+    }
+  }
+
+  if (!inInv) {
+    cout << "That isn't in your inventory" << endl;
+  } else {
+    //Delete the item pointer of the inventory
+    delete(inventory.at(itemIndex));
+    inventory.erase(inventory.begin() + itemIndex); //remove it from the vector
+    //Add that item to the room (will create a new item pointer)
+    currentRoom->setItem(item);
+    cout << "Dropped: " << item << endl;
+  }
+  return false;
 }
 
-void printInventory() {
-
+void printInventory(vector<Items*> &inventory) {
+  cout << "You are carrying: " << endl;
+  for (vector<Items*>::iterator it = inventory.begin(); it != inventory.end();) {
+    (*it)->getDescription();
+    cout << ", ";
+  }
 }
 
-bool getItem(Command* command) {
-  
-}
+void printHelp(Parser* parser) {
+  char input[20];
 
-void dropItem(Command* command) {
-  
+  cout << "You are in a school and are kinda hungry but no one seems to be here" << endl;
+  cout << "List of commands you can do: " << endl;
+  parser->showCommands();
+
+  cout << "\n" << "Do you want a hint on what to do? (yes, no)" << endl;
+  cin.getline(input, 20);
+  if (strcasecmp(input, "yes") == 0) {
+    cout << "I hear there may be a secret room in the cafeteria. Maybe there are snacks in there" << endl;
+  }
 }
 
 void listRooms() {
   char roomList[17][40] = { "Outside", "Theater", "Student Store", "Bathroom one", "Lab", "Office", "Computer Lab", "Physics room",
 			"Chemistry room", "Biology room", "Language room", "Cafeteria", "Secret Room (I wonder what's in there)",
 			"Math room", "Bathroom two", "English Room", "Engineering lab" };
-    for (int i = 0; i < 18; i++) {
-      cout << roomList[i];
+    for (int i = 0; i < 17; i++) {
+      cout << roomList[i] << ", ";
     }
+}
+
+bool hasItem(char item[]) {
+
+}
+
+bool quit(Command* command) {
+  if (command->hasSecondWord()) {
+    cout << "If you actually want to quit only type 'Quit' in the input"  << endl;
+    return false;
+  } else {
+    return true; //quits the game
+  }
 }
 
 
@@ -260,4 +368,6 @@ void createRooms(vector<Rooms*> &rooms, Rooms* &currentRoom) {
   engineeringLab->setItem(itemName);
 
   strcpy(itemName, "Snacks");
+  //Go to Chem room to get student store key. Go to student store to get snack pass. Go to engineering lab to get lockpick. Unlock secret rooms and have snack pass to win.
+
 }

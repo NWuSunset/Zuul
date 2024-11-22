@@ -19,7 +19,7 @@ void CommandWords::listCommands() {
 bool CommandWords::isCommand(char command[]) {
   //Loop through commands
   for (int i = 0; i < comNum; i++) {
-    if (strcmp(command, validCommands[i]) == 0) {
+    if (strcasecmp(command, validCommands[i]) == 0) {
         return true; //will return true if one of the commands matches
       }
   }

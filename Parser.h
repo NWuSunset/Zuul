@@ -9,6 +9,7 @@ class Parser {
  public:
   Parser();
   Command* getCommand();
+  void showCommands();
 
 private:
   CommandWords* newCommand = new CommandWords();

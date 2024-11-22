@@ -53,3 +53,8 @@ Command* Parser::getCommand() {
 	return new Command(NULL, secondWord); //Command is invalid (null command)
       }
   }
+
+void Parser::showCommands() { //So we can call list commands through a parser
+  newCommand->listCommands();
+}
+
