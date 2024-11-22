@@ -9,15 +9,22 @@ Parser::Parser() {
 Command* Parser::getCommand() { 
   cin.getline(input, 40);
 
-  char* token = strtok(input, ".");
+  char* token = strtok(input, " "); //find first word as before a space
   if (token != NULL) { //If the first word exists
     strcpy(firstWord, token); //then copy it into the first word cstring
     cout << token << endl;
   } else {
     firstWord[0] = '\0'; //Set firstWord null  if token is null
   }
+  
+  // Remove spaces from the word after the first token
+  char* temp = strtok(NULL, " ");
+  while (temp != NULL) {
+    strcat(firstWord, temp);
+    temp = strtok(NULL, " ");
+  }
   //move onto the next token. Null indicates using the same pointer to the input
-  token = strtok(NULL, " ");
+  token = strtok(NULL, " "); 
   if (token != NULL) { //Now check the second word
     strcpy(secondWord, token);
       cout << token << endl;
