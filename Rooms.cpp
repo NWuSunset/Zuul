@@ -56,7 +56,7 @@ void Rooms::setItem(char newItem[]) { //set an item to the room (this would crea
 
 Items* Rooms::getItem(char description[]) { //return an item based on the name?
   for (it = items.begin(); it != items.end(); it++) {
-    if (strcmp(description, this->description) == 0) {
+    if (strcasecmp(description, this->description) == 0) {
       return *it; //return the item it is pointing to.
     }
   }
