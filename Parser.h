@@ -16,5 +16,4 @@ private:
   char input[40]; 
   char firstWord[20];
   char secondWord[20];
-  char temp[20];
 };

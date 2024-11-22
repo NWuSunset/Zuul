@@ -16,13 +16,8 @@ Command* Parser::getCommand() {
   } else {
     firstWord[0] = '\0'; //Set firstWord null  if token is null
   }
-  
-  // Remove spaces from the word after the first token
-  char* temp = strtok(NULL, " ");
-  while (temp != NULL) {
-    strcat(firstWord, temp);
-    temp = strtok(NULL, " ");
-  }
+
+
   //move onto the next token. Null indicates using the same pointer to the input
   token = strtok(NULL, " "); 
   if (token != NULL) { //Now check the second word
@@ -32,6 +27,12 @@ Command* Parser::getCommand() {
     secondWord[0] = '\0'; //basically set it to NULL/isn't valid
   }
 
+  // Remove spaces from the second word
+    char* temp = strtok(NULL, " ");
+	    while (temp != NULL) {
+	    strcat(secondWord, temp);
+	    temp = strtok(NULL, " ");
+	  }
   
   
   /*
