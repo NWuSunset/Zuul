@@ -365,22 +365,22 @@ void createRooms(vector<Rooms*> &rooms, Rooms* &currentRoom, vector<Items*> &inv
   
   //items
   Items* iphone = new Items;
-  strcpy(iphone->description, "Broken Iphone");
+  strcpy(iphone->description, "Broken Iphone.");
   inventory.push_back(iphone);
   
-  strcpy(itemName, "Funny device");
+  strcpy(itemName, "Funny device.");
   computerLab->setItem(itemName);
 
-  strcpy(itemName, "Student Store key");
+  strcpy(itemName, "Student Store key.");
   chemistry->setItem(itemName);
 
-  strcpy(itemName, "Snack Pass"); //if player has the snack pass they get obtain snacks in the secret room
+  strcpy(itemName, "Snack Pass."); //if player has the snack pass they get obtain snacks in the secret room
   studentStore->setItem(itemName);
 
-  strcpy(itemName, "Lock Pick");
+  strcpy(itemName, "Lock Pick.");
   engineeringLab->setItem(itemName);
 
-  strcpy(itemName, "Snacks");
+  strcpy(itemName, "Snacks.");
   //Go to Chem room to get student store key. Go to student store to get snack pass. Go to engineering lab to get lockpick. Unlock secret rooms and have snack pass to win.
 
 }

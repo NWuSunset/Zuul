@@ -9,7 +9,7 @@ Parser::Parser() {
 Command* Parser::getCommand() { 
   cin.getline(input, 40);
 
-  char* token = strtok(input, " ");
+  char* token = strtok(input, ".");
   if (token != NULL) { //If the first word exists
     strcpy(firstWord, token); //then copy it into the first word cstring
     cout << token << endl;
