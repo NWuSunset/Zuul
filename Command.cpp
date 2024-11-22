@@ -5,8 +5,10 @@
 using namespace std;
 
 Command::Command(char firstWord[], char secondWord[]) {
+  if (firstWord != NULL) {
   strcpy(commandWord, firstWord);
   strcpy(this->secondWord, secondWord);
+  }
 }
 
 char* Command::getCommandWord() {
@@ -24,6 +26,6 @@ bool Command::isUnknown() { //returning true if commandWord is NULL (test if it 
 }
 
 bool Command::hasSecondWord() {
-  return (secondWord != NULL);
+  return (secondWord[0] != '\0');
 }
 

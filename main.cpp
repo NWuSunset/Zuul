@@ -5,7 +5,7 @@
 #include "Command.h"
 #include "Parser.h"
 
-void createRooms(vector<Rooms*> &, Rooms* &currentRoom);
+void createRooms(vector<Rooms*> &, Rooms* &currentRoom, vector<Items*> &inventory);
 bool executeCommand(Command* command, vector<Items*> &inventory, Rooms* &currentRoom, Parser* parser);
 void printHelp(Parser* parser);
 bool goRoom(Command* command, Rooms* &currentRoom);
@@ -14,7 +14,7 @@ void printInventory(vector<Items*> &inventory);
 bool getItem(Command* command, vector<Items*> &inventory, Rooms* &currentRoom);
 bool dropItem(Command* command, vector<Items*> &inventory, Rooms* &currentRoom);
 void listRooms();
-bool hasItem(char item[]);
+bool hasItem(char item[], vector<Items*> &inventory);
 
 int main() {
   Parser* parser = new Parser; //Parser
@@ -27,7 +27,7 @@ int main() {
   char itemName[20]; //separate arrays for rooms and items for clarity
   char exitDir[20];
   
-  createRooms(rooms, currentRoom);
+  createRooms(rooms, currentRoom, inventory);
 
 
   //Print the game intro screen
@@ -84,9 +84,11 @@ bool goRoom(Command* command, Rooms* &currentRoom) {
 
   if (nextRoom == nullptr) { //check if this will actually ever be null in the rooms.cpp
     cout << "There is no exit that way" << endl;
-  } else if () { //impliment locked method. And checking which room it is to give individual hints
-    //Student store need it's key. secret room needs lock pick. //Snacks need snack pass.
-  } else {
+  } else if (strcasecmp(nextRoom->getDescription(), "You are now in the student store") == 0 && nextRoom->isLocked()) {
+    cout << "Hmm. The student store is locked, I wonder if there is a key lying around somewhere" << endl;
+  } else if (strcasecmp(nextRoom->getDescription(),  "You are in a secret room") == 0 && nextRoom->isLocked()) {
+    cout << "Hmm. This door is locked. I wonder where I could find a lockpick" << endl;
+    } else {
     currentRoom = nextRoom; //go to the next room.
     cout << currentRoom->getDescription();
   }
@@ -109,9 +111,14 @@ bool getItem(Command* command, vector<Items*> &inventory, Rooms* &currentRoom) {
 
   if (newItem == nullptr) {
     cout << "That item isn't here" << endl;
-  } else if (strcasecmp(item, "Snacks") == 0 ) {
-    //needs snack pass
   } else {
+
+    //Check if we have the win condition in the inventory
+    
+    if (!hasItem(item, inventory)) {
+      cout << "You need a snack pass to get the snacks here. I wonder what place would have a snack pass, probably somewhere with a lot of snacks" << endl;
+	return false;
+      }
 
     //Put in inventory
     inventory.push_back(newItem);
@@ -136,7 +143,7 @@ bool getItem(Command* command, vector<Items*> &inventory, Rooms* &currentRoom) {
 bool dropItem(Command* command, vector<Items*> &inventory, Rooms* &currentRoom) {
   char item[20];
   bool inInv = false;
-  int itemIndex = NULL;
+  int itemIndex = -1;
 
   if (!command->hasSecondWord()) {
     cout << "Drop what?" << endl;
@@ -146,7 +153,7 @@ bool dropItem(Command* command, vector<Items*> &inventory, Rooms* &currentRoom) 
   strcpy(item, command->getSecondWord()); //create a cstring of the item
 
   //loop through the inventory and drop the respective item.
-  for (vector<Items*>::iterator it = inventory.begin(); it != inventory.end(); ) {
+  for (vector<Items*>::iterator it = inventory.begin(); it != inventory.end(); it++) {
     if (strcasecmp((*it)->getDescription(), item) == 0) {
       itemIndex = it - inventory.begin();
       inInv = true;
@@ -169,8 +176,8 @@ bool dropItem(Command* command, vector<Items*> &inventory, Rooms* &currentRoom) 
 
 void printInventory(vector<Items*> &inventory) {
   cout << "You are carrying: " << endl;
-  for (vector<Items*>::iterator it = inventory.begin(); it != inventory.end();) {
-    (*it)->getDescription();
+  for (vector<Items*>::iterator it = inventory.begin(); it != inventory.end(); it++) {
+    cout << (*it)->getDescription();
     cout << ", ";
   }
 }
@@ -198,8 +205,13 @@ void listRooms() {
     }
 }
 
-bool hasItem(char item[]) {
-
+bool hasItem(char item[], vector<Items*> &inventory) {
+  for (vector<Items*>::iterator it = inventory.begin(); it != inventory.end(); it++) {
+    if (strcasecmp((*it)->getDescription(), item) == 0) {
+      return true;
+    }
+  }
+  return false;
 }
 
 bool quit(Command* command) {
@@ -212,7 +224,7 @@ bool quit(Command* command) {
 }
 
 
-void createRooms(vector<Rooms*> &rooms, Rooms* &currentRoom) {
+void createRooms(vector<Rooms*> &rooms, Rooms* &currentRoom, vector<Items*> &inventory) {
   char roomDir[40];
   char itemName[20];
   char exitDir[20];
@@ -354,7 +366,8 @@ void createRooms(vector<Rooms*> &rooms, Rooms* &currentRoom) {
   //items
   Items* iphone = new Items;
   strcpy(iphone->description, "Broken Iphone");
-
+  inventory.push_back(iphone);
+  
   strcpy(itemName, "Funny device");
   computerLab->setItem(itemName);
 

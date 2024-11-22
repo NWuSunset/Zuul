@@ -27,6 +27,7 @@ public:
   void removeItem(char description[]);
   void printRoomItems();
   void toggleLock();
+  bool isLocked();
   
 private:
   //Variables

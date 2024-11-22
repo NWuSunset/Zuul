@@ -23,7 +23,8 @@ Rooms::Rooms() {
 }
 
 void Rooms::setExit(char direction[], Rooms* neighbor) {
-  exits.insert({direction, neighbor});
+  char * temp = direction;
+  exits.insert({temp, neighbor});
 }
 
 Rooms* Rooms::getExit(char direction[]) {
@@ -87,4 +88,8 @@ void Rooms::toggleLock() {
   } else {
     locked = false;
   }
+}
+
+bool Rooms::isLocked() {
+  return locked;
 }

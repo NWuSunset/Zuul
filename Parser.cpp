@@ -22,7 +22,7 @@ Command* Parser::getCommand() {
     strcpy(secondWord, token);
       cout << token << endl;
   } else {
-    secondWord[0] = '\0'; //basically set it to NULL
+    secondWord[0] = '\0'; //basically set it to NULL/isn't valid
   }
 
   
