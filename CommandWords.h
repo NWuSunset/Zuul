@@ -3,8 +3,6 @@
 
 using namespace std;
 
-
-
 class CommandWords {
  public:
   //Methods

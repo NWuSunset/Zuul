@@ -4,12 +4,11 @@
 
 using namespace std;
 
-CommandWords::CommandWords() {
-
-}
+//Holds the list of commands basically
+CommandWords::CommandWords() = default;
 
 void CommandWords::listCommands() {
-  //list all the avalible commands
+  //list all the available commands
   for (int i = 0; i < comNum - 1; i++) {
     cout << validCommands[i] << ", ";
   }

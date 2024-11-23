@@ -1,4 +1,3 @@
-#include <cstring>
 #include "CommandWords.h"
 #include "Command.h"
 using namespace std;
@@ -13,7 +12,7 @@ class Parser {
 
 private:
   CommandWords* newCommand = new CommandWords();
-  char input[40]; 
-  char firstWord[20];
-  char secondWord[20];
+  char input[40]{};
+  char firstWord[20]{};
+  char secondWord[20]{};
 };

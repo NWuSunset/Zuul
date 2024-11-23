@@ -16,6 +16,7 @@ class Rooms {
 public:
   Rooms(char description[]);
   Rooms();
+  ~Rooms();
 
   //Methods
   void setExit(char direction[], Rooms* neighbor);
@@ -28,12 +29,13 @@ public:
   void printRoomItems();
   void toggleLock();
   bool isLocked();
+  void getLongDescription();
   
 private:
   //Variables
-  map<char*, Rooms*> exits; //maping the director to the neighboring room
+  map<char*, Rooms*> exits; //mapping the direction to the neighboring room in that direction
   vector<Items*> items;
-  char description[40];
+  char description[40]{};
   vector<Items*>::iterator it; //items iterator
   bool locked = false; //rooms aren't locked by default
 };

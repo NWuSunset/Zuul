@@ -4,8 +4,9 @@
 
 using namespace std;
 
+//Handles commands
 Command::Command(char firstWord[], char secondWord[]) {
-  if (firstWord != NULL) {
+  if (firstWord != nullptr) {
   strcpy(commandWord, firstWord);
   strcpy(this->secondWord, secondWord);
   }
@@ -22,7 +23,7 @@ char* Command::getSecondWord() {
 }
 
 bool Command::isUnknown() { //returning true if commandWord is NULL (test if it works) 
-  return (commandWord == NULL);
+  return (commandWord == nullptr);
 }
 
 bool Command::hasSecondWord() {
