@@ -46,9 +46,8 @@ char* Rooms::getDescription() {
 void Rooms::getLongDescription() {
   cout << description << endl;
   printRoomExits();
-  cout << "Items in room: ";
+  cout << "Items in room: " << endl;
   printRoomItems();
-  cout << endl;
 }
 
 void Rooms::setItem(char newItem[]) {
@@ -69,9 +68,10 @@ Items* Rooms::getItem(char description[]) { //return an item based on the name
 void Rooms::removeItem(char description[]) {
   //Loop through room items
   for (it = items.begin(); it != items.end(); ++it) {
-     if (strcmp(description, this->description) == 0) {
-      delete *it; //delete the item the iterator is pointing to
-      items.erase(it); //erase it from the vector
+     if (strcasecmp(description, (*it)->description) == 0) {
+     // delete *it; (don't want to delete the item entirely, since it's used in the getItem function)
+      items.erase(it); //only erase it from the vector
+       break;
     }
   }
 }
