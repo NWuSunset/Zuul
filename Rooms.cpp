@@ -8,7 +8,6 @@
 Rooms::Rooms(char description[]) {
     //description of room set on constructor
     strcpy(this->description, description);
-    cout << "Room Constructor" << endl;
 }
 
 Rooms::Rooms() = default; //empty constructor
