@@ -5,14 +5,14 @@ using namespace std;
 
 //Making a parser class for practice. And to make getting commands from the player easier
 class Parser {
- public:
-  Parser();
-  Command* getCommand();
-  void showCommands();
+public:
+    Parser();
+    Command* getCommand();
+    void showCommands();
 
 private:
-  CommandWords* newCommand = new CommandWords();
-  char input[40]{};
-  char firstWord[20]{};
-  char secondWord[20]{};
+    CommandWords* newCommand = new CommandWords();
+    char input[40]{};
+    char firstWord[20]{};
+    char secondWord[20]{};
 };
